@@ -1,0 +1,46 @@
+<div class="container mt-4">
+  <h2>Product List</h2>
+  <a routerLink="/add" class="btn btn-primary mb-3">Add Product</a>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Price</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let product of products">
+        <td>{{ product.id }}</td>
+        <td>{{ product.name }}</td>
+        <td>{{ product.price | currency }}</td>
+        <td>
+          <a [routerLink]="['/edit', product.id]" class="btn btn-warning btn-sm me-2">Edit</a>
+          <button (click)="openDeleteModal(product.id)" class="btn btn-danger btn-sm">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Delete Confirmation Modal -->
+  <div class="modal" tabindex="-1" [class.d-block]="showDeleteModal"
+    [style.background-color]="showDeleteModal ? 'rgba(0,0,0,0.5)' : 'transparent'" role="dialog"
+    *ngIf="showDeleteModal">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Confirm Deletion</h5>
+          <button type="button" class="btn-close" (click)="closeDeleteModal()" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>Are you sure you want to delete this product?</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="closeDeleteModal()">Cancel</button>
+          <button type="button" class="btn btn-danger" (click)="confirmDelete()">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
