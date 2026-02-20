@@ -16,7 +16,10 @@ import { NotificationService } from '../notification.service';
 export class ProductAddComponent implements OnInit {
     product: Product = {
         name: '',
-        price: 0
+        price: 0,
+        description: '',
+        stock: 0,
+        actif: true
     };
     isEditMode = false;
 
@@ -54,14 +57,32 @@ export class ProductAddComponent implements OnInit {
             return;
         }
         if (this.isEditMode && this.product.id) {
-            this.productService.updateProduct(this.product.id, this.product).subscribe(() => {
-                this.notificationService.show('Product updated successfully', 'success');
-                this.router.navigate(['/products']);
+            this.productService.updateProduct(this.product.id, this.product).subscribe({
+                next: () => {
+                    this.notificationService.show('Product updated successfully', 'success');
+                    this.router.navigate(['/products']);
+                },
+                error: (err) => {
+                    if (err.status === 409 && err.error?.error) {
+                        this.notificationService.show(err.error.error, 'danger');
+                    } else {
+                        this.notificationService.show('An error occurred while updating the product', 'danger');
+                    }
+                }
             });
         } else {
-            this.productService.addProduct(this.product).subscribe(() => {
-                this.notificationService.show('Product created successfully', 'success');
-                this.router.navigate(['/products']);
+            this.productService.addProduct(this.product).subscribe({
+                next: () => {
+                    this.notificationService.show('Product created successfully', 'success');
+                    this.router.navigate(['/products']);
+                },
+                error: (err) => {
+                    if (err.status === 409 && err.error?.error) {
+                        this.notificationService.show(err.error.error, 'danger');
+                    } else {
+                        this.notificationService.show('An error occurred while creating the product', 'danger');
+                    }
+                }
             });
         }
     }

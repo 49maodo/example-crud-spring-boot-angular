@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ProductService {
@@ -18,15 +17,28 @@ public class ProductService {
         return productRepository.findAll();
     }
 
-    public Optional<Product> getProductById(Long id) {
-        return productRepository.findById(id);
+    public Product getProductById(Long id) {
+        return productRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
     }
 
     public Product saveProduct(Product product) {
+        if (product.getId() == null) {
+            if (productRepository.existsByName(product.getName())) {
+                throw new IllegalArgumentException("Product name already exists");
+            }
+        } else {
+            if (productRepository.existsByNameAndIdNot(product.getName(), product.getId())) {
+                throw new IllegalArgumentException("Product name already exists");
+            }
+        }
         return productRepository.save(product);
     }
 
     public void deleteProduct(Long id) {
+        if (!productRepository.existsById(id)) {
+            throw new RuntimeException("Product not found");
+        }
         productRepository.deleteById(id);
     }
 }

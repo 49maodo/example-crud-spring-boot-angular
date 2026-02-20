@@ -18,6 +18,28 @@
                 <div *ngIf="price.errors?.['min']">Price must be greater than 0.</div>
             </div>
         </div>
+        <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <textarea class="form-control" id="description" [(ngModel)]="product.description" name="description"
+                required #description="ngModel"></textarea>
+            <div *ngIf="description.invalid && (description.dirty || description.touched)"
+                class="alert alert-danger mt-1">
+                Description is required.
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="stock" class="form-label">Stock</label>
+            <input type="number" class="form-control" id="stock" [(ngModel)]="product.stock" name="stock" required
+                min="0" #stock="ngModel">
+            <div *ngIf="stock.invalid && (stock.dirty || stock.touched)" class="alert alert-danger mt-1">
+                <div *ngIf="stock.errors?.['required']">Stock is required.</div>
+                <div *ngIf="stock.errors?.['min']">Stock cannot be negative.</div>
+            </div>
+        </div>
+        <div class="mb-3 form-check">
+            <input type="checkbox" class="form-check-input" id="actif" [(ngModel)]="product.actif" name="actif">
+            <label class="form-check-label" for="actif">Active</label>
+        </div>
         <button type="submit" class="btn btn-primary" [disabled]="productForm.invalid">{{ isEditMode ? 'Update' :
             'Submit' }}</button>
     </form>

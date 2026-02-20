@@ -4,6 +4,8 @@ import com.example.gestionproduit.model.Product;
 import com.example.gestionproduit.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
+import java.util.Map;
 
 import java.util.List;
 
@@ -21,23 +23,41 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    public Product getProductById(@PathVariable Long id) {
-        return productService.getProductById(id).orElse(null);
+    public ResponseEntity<?> getProductById(@PathVariable Long id) {
+        try {
+            return ResponseEntity.ok(productService.getProductById(id));
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(404).body(Map.of("error", e.getMessage()));
+        }
     }
 
     @PostMapping
-    public Product createProduct(@jakarta.validation.Valid @RequestBody Product product) {
-        return productService.saveProduct(product);
+    public ResponseEntity<?> createProduct(@jakarta.validation.Valid @RequestBody Product product) {
+        try {
+            return ResponseEntity.ok(productService.saveProduct(product));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(409).body(Map.of("error", e.getMessage()));
+        }
     }
 
     @PutMapping("/{id}")
-    public Product updateProduct(@PathVariable Long id, @jakarta.validation.Valid @RequestBody Product product) {
-        product.setId(id);
-        return productService.saveProduct(product);
+    public ResponseEntity<?> updateProduct(@PathVariable Long id,
+            @jakarta.validation.Valid @RequestBody Product product) {
+        try {
+            product.setId(id);
+            return ResponseEntity.ok(productService.saveProduct(product));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(409).body(Map.of("error", e.getMessage()));
+        }
     }
 
     @DeleteMapping("/{id}")
-    public void deleteProduct(@PathVariable Long id) {
-        productService.deleteProduct(id);
+    public ResponseEntity<?> deleteProduct(@PathVariable Long id) {
+        try {
+            productService.deleteProduct(id);
+            return ResponseEntity.noContent().build();
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(404).body(Map.of("error", e.getMessage()));
+        }
     }
 }
