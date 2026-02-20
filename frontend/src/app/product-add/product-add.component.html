@@ -1,21 +1,21 @@
 <div class="container mt-4">
-    <h2>{{ isEditMode ? 'Edit Product' : 'Add Product' }}</h2>
+    <h2>{{ isEditMode ? 'Modifier le Produit' : 'Ajouter un Produit' }}</h2>
     <form (ngSubmit)="onSubmit(productForm)" #productForm="ngForm">
         <div class="mb-3">
-            <label for="name" class="form-label">Name</label>
+            <label for="name" class="form-label">Nom</label>
             <input type="text" class="form-control" id="name" [(ngModel)]="product.name" name="name" required
                 #name="ngModel">
             <div *ngIf="name.invalid && (name.dirty || name.touched)" class="alert alert-danger mt-1">
-                Name is required.
+                Le nom est requis.
             </div>
         </div>
         <div class="mb-3">
-            <label for="price" class="form-label">Price</label>
+            <label for="price" class="form-label">Prix</label>
             <input type="number" class="form-control" id="price" [(ngModel)]="product.price" name="price" required
                 min="0.01" #price="ngModel">
             <div *ngIf="price.invalid && (price.dirty || price.touched)" class="alert alert-danger mt-1">
-                <div *ngIf="price.errors?.['required']">Price is required.</div>
-                <div *ngIf="price.errors?.['min']">Price must be greater than 0.</div>
+                <div *ngIf="price.errors?.['required']">Le prix est requis.</div>
+                <div *ngIf="price.errors?.['min']">Le prix doit être strictement supérieur à 0.</div>
             </div>
         </div>
         <div class="mb-3">
@@ -24,7 +24,7 @@
                 required #description="ngModel"></textarea>
             <div *ngIf="description.invalid && (description.dirty || description.touched)"
                 class="alert alert-danger mt-1">
-                Description is required.
+                La description est requise.
             </div>
         </div>
         <div class="mb-3">
@@ -32,15 +32,15 @@
             <input type="number" class="form-control" id="stock" [(ngModel)]="product.stock" name="stock" required
                 min="0" #stock="ngModel">
             <div *ngIf="stock.invalid && (stock.dirty || stock.touched)" class="alert alert-danger mt-1">
-                <div *ngIf="stock.errors?.['required']">Stock is required.</div>
-                <div *ngIf="stock.errors?.['min']">Stock cannot be negative.</div>
+                <div *ngIf="stock.errors?.['required']">Le stock est requis.</div>
+                <div *ngIf="stock.errors?.['min']">Le stock ne peut pas être négatif.</div>
             </div>
         </div>
         <div class="mb-3 form-check">
             <input type="checkbox" class="form-check-input" id="actif" [(ngModel)]="product.actif" name="actif">
-            <label class="form-check-label" for="actif">Active</label>
+            <label class="form-check-label" for="actif">Actif</label>
         </div>
-        <button type="submit" class="btn btn-primary" [disabled]="productForm.invalid">{{ isEditMode ? 'Update' :
-            'Submit' }}</button>
+        <button type="submit" class="btn btn-primary" [disabled]="productForm.invalid">{{ isEditMode ? 'Mettre à jour' :
+            'Soumettre' }}</button>
     </form>
 </div>

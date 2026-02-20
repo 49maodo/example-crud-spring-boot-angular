@@ -4,6 +4,8 @@ import { ProductService } from '../product.service';
 import { Product } from '../product';
 import { RouterModule } from '@angular/router';
 import { NotificationService } from '../notification.service';
+import { AuthService } from '../auth.service';
+import { CartService } from '../cart.service';
 
 @Component({
     selector: 'app-product-list',
@@ -17,7 +19,12 @@ export class ProductListComponent implements OnInit {
     showDeleteModal = false;
     productIdToDelete: number | null = null;
 
-    constructor(private productService: ProductService, private notificationService: NotificationService) { }
+    constructor(
+        private productService: ProductService,
+        private notificationService: NotificationService,
+        public authService: AuthService,
+        private cartService: CartService
+    ) { }
 
     ngOnInit(): void {
         this.getProducts();
@@ -43,9 +50,19 @@ export class ProductListComponent implements OnInit {
         if (this.productIdToDelete) {
             this.productService.deleteProduct(this.productIdToDelete).subscribe(() => {
                 this.products = this.products.filter(p => p.id !== this.productIdToDelete);
-                this.notificationService.show('Product deleted successfully', 'success');
+                this.notificationService.show('Produit supprimé avec succès', 'success');
                 this.closeDeleteModal();
             });
+        }
+    }
+
+    addToCart(product: Product): void {
+        const stock = product.stock || 0;
+        if (stock > 0 && product.actif) {
+            this.cartService.addToCart(product, 1);
+            this.notificationService.show(`${product.name} ajouté au panier !`, 'success');
+        } else {
+            this.notificationService.show('Ce produit est en rupture de stock ou inactif.', 'warning');
         }
     }
 }

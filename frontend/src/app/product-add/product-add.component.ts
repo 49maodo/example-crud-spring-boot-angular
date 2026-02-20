@@ -5,7 +5,6 @@ import { ProductService } from '../product.service';
 import { Product } from '../product';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NotificationService } from '../notification.service';
-
 @Component({
     selector: 'app-product-add',
     standalone: true,
@@ -48,7 +47,7 @@ export class ProductAddComponent implements OnInit {
     }
 
     handleNotFound() {
-        this.notificationService.show('Product not found', 'danger');
+        this.notificationService.show('Produit introuvable', 'danger');
         this.router.navigate(['/404']);
     }
 
@@ -59,28 +58,28 @@ export class ProductAddComponent implements OnInit {
         if (this.isEditMode && this.product.id) {
             this.productService.updateProduct(this.product.id, this.product).subscribe({
                 next: () => {
-                    this.notificationService.show('Product updated successfully', 'success');
+                    this.notificationService.show('Produit mis à jour avec succès', 'success');
                     this.router.navigate(['/products']);
                 },
                 error: (err) => {
                     if (err.status === 409 && err.error?.error) {
                         this.notificationService.show(err.error.error, 'danger');
                     } else {
-                        this.notificationService.show('An error occurred while updating the product', 'danger');
+                        this.notificationService.show('Une erreur est survenue lors de la mise à jour', 'danger');
                     }
                 }
             });
         } else {
             this.productService.addProduct(this.product).subscribe({
                 next: () => {
-                    this.notificationService.show('Product created successfully', 'success');
+                    this.notificationService.show('Produit créé avec succès', 'success');
                     this.router.navigate(['/products']);
                 },
                 error: (err) => {
                     if (err.status === 409 && err.error?.error) {
                         this.notificationService.show(err.error.error, 'danger');
                     } else {
-                        this.notificationService.show('An error occurred while creating the product', 'danger');
+                        this.notificationService.show('Une erreur est survenue lors de la création', 'danger');
                     }
                 }
             });

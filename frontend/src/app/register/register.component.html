@@ -1,0 +1,41 @@
+<div class="row justify-content-center mt-5">
+    <div class="col-md-6 col-lg-4">
+        <div class="card shadow-sm">
+            <div class="card-body p-4">
+                <h2 class="text-center mb-4">S'inscrire</h2>
+                <form (ngSubmit)="onSubmit()" #registerForm="ngForm">
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Nom d'utilisateur</label>
+                        <input type="text" class="form-control" id="username" name="username"
+                            [(ngModel)]="userData.username" required minlength="3" #username="ngModel">
+                        <div *ngIf="username.invalid && (username.dirty || username.touched)"
+                            class="text-danger small mt-1">
+                            <span *ngIf="username.errors?.['required']">Le nom d'utilisateur est requis.</span>
+                            <span *ngIf="username.errors?.['minlength']">Le nom d'utilisateur doit contenir au moins 3
+                                caractères.</span>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Mot de passe</label>
+                        <input type="password" class="form-control" id="password" name="password"
+                            [(ngModel)]="userData.password" required minlength="6" #password="ngModel">
+                        <div *ngIf="password.invalid && (password.dirty || password.touched)"
+                            class="text-danger small mt-1">
+                            <span *ngIf="password.errors?.['required']">Le mot de passe est requis.</span>
+                            <span *ngIf="password.errors?.['minlength']">Le mot de passe doit contenir au moins 6
+                                caractères.</span>
+                        </div>
+                    </div>
+                    <div class="d-grid mt-4">
+                        <button type="submit" class="btn btn-success"
+                            [disabled]="registerForm.invalid">S'inscrire</button>
+                    </div>
+                </form>
+                <div class="text-center mt-3">
+                    <span class="text-muted">Vous avez déjà un compte ?</span>
+                    <a routerLink="/login" class="ms-1 text-decoration-none">Se connecter</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
