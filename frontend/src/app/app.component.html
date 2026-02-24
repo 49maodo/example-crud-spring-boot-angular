@@ -19,7 +19,7 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" routerLink="/my-orders" routerLinkActive="active"
-                        *ngIf="authService.isAuthenticated()">Mes Commandes</a>
+                        *ngIf="authService.isAuthenticated() && !authService.isAdmin()">Mes Commandes</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" routerLink="/all-orders" routerLinkActive="active"
